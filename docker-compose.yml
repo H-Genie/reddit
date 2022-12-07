@@ -1,0 +1,13 @@
+version: "3"
+services:
+    db:
+        image: postgres:latest
+        container_name: reddit
+        restart: always
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: "${DB_USERS_ID}"
+            POSTGRES_PASSWORD: "${DB_USERS_PASSWORD}"
+        volumes:
+            - ./data:/var/lib/postgresql/data
