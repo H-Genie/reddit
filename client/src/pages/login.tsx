@@ -1,12 +1,10 @@
 import React, { useState, FormEvent } from "react";
+import InputGroup from "../components/InputGroup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-import InputGroup from "../components/InputGroup";
-
-const Register = () => {
-    const [email, setEmail] = useState("");
+const Login = () => {
     const [errors, setErrors] = useState<any>({});
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -16,12 +14,16 @@ const Register = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post("/auth/register", {
-                email,
-                username,
-                password,
-            });
-            router.push("/login");
+            await axios.post(
+                "/auth/login",
+                {
+                    username,
+                    password,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
         } catch (err: any) {
             console.log(err);
             setErrors(err.response.data || {});
@@ -32,17 +34,16 @@ const Register = () => {
         <div className="bg-white">
             <div className="flex flex-col items-center justify-center h-screen p-6">
                 <div className="w-10/12 mx-auto md:w-96">
-                    <h1 className="mb-2 text-lg font-medium">회원가입</h1>
+                    <h1 className="mb-2 text-lg font-medium">로그인</h1>
                     <form onSubmit={handleSubmit}>
-                        <InputGroup placeholder="Email" value={email} setValue={setEmail} error={errors.email} />
                         <InputGroup placeholder="Username" value={username} setValue={setUsername} error={errors.username} />
                         <InputGroup placeholder="Password" value={password} setValue={setPassword} error={errors.password} />
-                        <button className="w-full py-2 mb-1 text-xs font-bold text-white uppercase bg-gray-400 border border-gray-400 rounded">회원가입</button>
+                        <button className="w-full py-2 mb-1 text-xs font-bold text-white uppercase bg-gray-400 border border-gray-400 rounded">로그인</button>
                     </form>
                     <small>
-                        이미 가입하셨나요?
-                        <Link href="/login">
-                            <span className="ml-1 text-blue-500 uppercase">로그인</span>
+                        아직 가입하지 않으셨나요?
+                        <Link href="/register">
+                            <span className="ml-1 text-blue-500 uppercase">회원가입</span>
                         </Link>
                     </small>
                 </div>
@@ -51,4 +52,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default Login;
