@@ -37,7 +37,7 @@ const Login = () => {
                     <h1 className="mb-2 text-lg font-medium">로그인</h1>
                     <form onSubmit={handleSubmit}>
                         <InputGroup placeholder="Username" value={username} setValue={setUsername} error={errors.username} />
-                        <InputGroup placeholder="Password" value={password} setValue={setPassword} error={errors.password} />
+                        <InputGroup placeholder="Password" value={password} setValue={setPassword} error={errors.password} type={"password"} />
                         <button className="w-full py-2 mb-1 text-xs font-bold text-white uppercase bg-gray-400 border border-gray-400 rounded">로그인</button>
                     </form>
                     <small>
