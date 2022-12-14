@@ -17,7 +17,8 @@ const SubCreate = () => {
             router.push(`/r/${res.data.name}`);
         } catch (err: any) {
             console.log(err);
-            setErrors(err.response.data);
+            // setErrors(err.response.data);
+            setErrors(err);
         }
     };
 
