@@ -14,6 +14,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if (!user) throw new Error("Unauthenticated");
 
         res.locals.user = user;
+        return next();
     } catch (err) {
         console.log(err);
         return res.status(400).json({ err });

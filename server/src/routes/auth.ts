@@ -94,7 +94,7 @@ const me = async (_: Request, res: Response) => {
 };
 
 const router = Router();
-router.get(".me", userMiddleware, authMiddleware, me);
+router.get("/me", userMiddleware, authMiddleware, me);
 router.post("/register", register);
 router.post("/login", login);
 
