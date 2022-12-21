@@ -1,9 +1,22 @@
+import axios from "axios";
 import Link from "next/link";
 import React from "react";
-import { useAuthState } from "../context/auth";
+import { useAuthDispatch, useAuthState } from "../context/auth";
 
 const NavBar: React.FC = () => {
     const { loading, authenticated } = useAuthState();
+    const dispatch = useAuthDispatch();
+
+    const handleLogout = () => {
+        axios
+            .post("/auth/logout")
+            .then(() => {
+                dispatch("LOGOUT");
+                window.location.reload();
+            })
+            .catch((err) => console.log(err));
+    };
+
     return (
         <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-16 px-5 bg-white">
             <span className="text-2xl font-semibold text-gray-400">
@@ -17,7 +30,9 @@ const NavBar: React.FC = () => {
             <div className="flex">
                 {!loading &&
                     (authenticated ? (
-                        <button className="w-20 p-2 mr-2 text-center text-white bg-gray-400 rounded">로그아웃</button>
+                        <button className="w-20 p-2 mr-2 text-center text-white bg-gray-400 rounded" onClick={handleLogout}>
+                            로그아웃
+                        </button>
                     ) : (
                         <>
                             <Link href={"/login"}>
