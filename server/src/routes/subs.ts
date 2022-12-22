@@ -6,6 +6,7 @@ import authMiddleware from "../middlewares/auth";
 import { isEmpty } from "class-validator";
 import { AppDataSource } from "../data-source";
 import Sub from "../entities/Sub";
+import Post from "../entities/Post";
 
 const createSub = async (req: Request, res: Response, next: NextFunction) => {
     const { name, title, description } = req.body;
@@ -42,8 +43,27 @@ const createSub = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+const topSubs = async (req: Request, res: Response) => {
+    try {
+        const imageUrlExp = `COALESCE(s."imageUrn", 'https://www.gravatar.com/avatar?d=mp&f=y')`;
+        const subs = await AppDataSource.createQueryBuilder()
+            .select(`s.title, s.name, ${imageUrlExp} as "imageUrl", count(p.id) as "postCount`)
+            .from(Sub, "s")
+            .leftJoin(Post, "p", `s.name = p."subName"`)
+            .groupBy('s.title, s.name, "imageUrl"')
+            .orderBy(`"postCount", "DESC`)
+            .limit(5)
+            .execute();
+        return res.json(subs);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ err });
+    }
+};
+
 const router = Router();
 
 router.post("/", userMiddleware, authMiddleware, createSub);
+router.get("/sub/topSubs", topSubs);
 
 export default router;
