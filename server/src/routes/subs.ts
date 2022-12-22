@@ -47,11 +47,11 @@ const topSubs = async (req: Request, res: Response) => {
     try {
         const imageUrlExp = `COALESCE(s."imageUrn", 'https://www.gravatar.com/avatar?d=mp&f=y')`;
         const subs = await AppDataSource.createQueryBuilder()
-            .select(`s.title, s.name, ${imageUrlExp} as "imageUrl", count(p.id) as "postCount`)
+            .select(`s.title, s.name, ${imageUrlExp} as "imageUrl", count(p.id) as "postCount"`)
             .from(Sub, "s")
             .leftJoin(Post, "p", `s.name = p."subName"`)
             .groupBy('s.title, s.name, "imageUrl"')
-            .orderBy(`"postCount", "DESC`)
+            .orderBy(`"postCount"`, "DESC")
             .limit(5)
             .execute();
         return res.json(subs);
