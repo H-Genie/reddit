@@ -61,9 +61,20 @@ const topSubs = async (req: Request, res: Response) => {
     }
 };
 
+const getSub = async (req: Request, res: Response) => {
+    const name = req.params.name;
+    try {
+        const sub = await Sub.findOneByOrFail({ name });
+        return res.json(sub);
+    } catch (err) {
+        return res.status(404).json({ err });
+    }
+};
+
 const router = Router();
 
 router.post("/", userMiddleware, authMiddleware, createSub);
 router.get("/sub/topSubs", topSubs);
+router.get("/:name", userMiddleware, getSub);
 
 export default router;
